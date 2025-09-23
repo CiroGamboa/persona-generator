@@ -3,6 +3,7 @@ Command-line interface for the persona generator.
 """
 
 import argparse
+import os
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -11,16 +12,57 @@ from .factories.persona_factory import PersonaFactory
 
 
 def load_environment():
-    """Load environment variables from .env file."""
+    """Load environment variables from .env file if it exists."""
     env_path = Path(".env")
-    if not env_path.exists():
-        raise FileNotFoundError(".env file not found in the project root")
-    load_dotenv(env_path)
+    if env_path.exists():
+        load_dotenv(env_path)
+        print("✅ Loaded environment variables from .env file")
+    else:
+        print("⚠️  No .env file found. Using system environment variables.")
+    
+    # Check if OpenAI API key is available
+    if not os.getenv("OPENAI_API_KEY"):
+        print("❌ OPENAI_API_KEY not found!")
+        print("   Please set your OpenAI API key in one of these ways:")
+        print("   1. Create a .env file with: OPENAI_API_KEY=your_key_here")
+        print("   2. Export it: export OPENAI_API_KEY=your_key_here")
+        print("   3. Set it in your shell profile (~/.bashrc, ~/.zshrc, etc.)")
+        raise ValueError("OPENAI_API_KEY environment variable is required")
+
+
+def get_package_path():
+    """Get the path to the installed package."""
+    import persona_generator
+    return Path(persona_generator.__file__).parent
 
 
 def parse_arguments():
     """Parse command line arguments."""
-    parser = argparse.ArgumentParser(description="Generate personas using OpenAI")
+    package_path = get_package_path()
+    default_schema = package_path / "schemas" / "default_schema.yaml"
+    default_config = package_path / "generators" / "config" / "generator_config.yaml"
+    
+    parser = argparse.ArgumentParser(
+        description="Generate personas using OpenAI",
+        epilog="""
+Environment Variables:
+  OPENAI_API_KEY    Your OpenAI API key (required)
+  
+Examples:
+  # Generate 1 persona with default settings
+  persona-generator
+  
+  # Generate 5 personas
+  persona-generator -n 5
+  
+  # Use custom schema and config
+  persona-generator -s my_schema.yaml -c my_config.yaml
+  
+  # Export as YAML format
+  persona-generator -f yaml -o my_personas
+        """,
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument(
         "-n",
         "--num-personas",
@@ -32,21 +74,15 @@ def parse_arguments():
         "-s",
         "--schema",
         type=str,
-        default="persona_generator/schemas/default_schema.yaml",
-        help=(
-            "Path to schema file "
-            "(default: persona_generator/schemas/default_schema.yaml)"
-        ),
+        default=str(default_schema),
+        help=f"Path to schema file (default: {default_schema})",
     )
     parser.add_argument(
         "-c",
         "--config",
         type=str,
-        default="persona_generator/generators/config/generator_config.yaml",
-        help=(
-            "Path to generator config file "
-            "(default: persona_generator/generators/config/generator_config.yaml)"
-        ),
+        default=str(default_config),
+        help=f"Path to generator config file (default: {default_config})",
     )
     parser.add_argument(
         "-f",

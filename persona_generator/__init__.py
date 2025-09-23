@@ -12,7 +12,7 @@ from .models.characteristics import Characteristic
 from .models.persona import Persona
 from .models.schema import Schema
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __author__ = "Ciro Gamboa"
 __email__ = "ciro@example.com"
 
