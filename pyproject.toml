@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "persona-generator"
+version = "1.0.0"
+description = "A powerful and flexible tool for generating detailed, consistent, and diverse personas using AI models"
+readme = "README.md"
+license = "MIT"
+authors = [
+    {name = "Ciro Gamboa", email = "ciro@example.com"}
+]
+maintainers = [
+    {name = "Ciro Gamboa", email = "ciro@example.com"}
+]
+keywords = ["persona", "ai", "generation", "openai", "yaml", "schema"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "pyyaml>=6.0.0",
+    "openai>=1.0.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=22.0.0",
+    "flake8>=4.0.0",
+    "mypy>=0.950",
+]
+test = [
+    "pytest>=7.0.0",
+    "pytest-cov>=3.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/CiroGamboa/persona-generator"
+Repository = "https://github.com/CiroGamboa/persona-generator"
+Issues = "https://github.com/CiroGamboa/persona-generator/issues"
+
+[project.scripts]
+persona-generator = "persona_generator.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["persona_generator*"]
+
+[tool.setuptools.package-data]
+persona_generator = [
+    "schemas/*.yaml",
+    "generators/config/*.yaml",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true

@@ -13,32 +13,40 @@ A powerful and flexible tool for generating detailed, consistent, and diverse pe
 
 ## Quick Start
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/CiroGamboa/persona-generator.git
-   cd persona-generator
-   ```
+### Installation
 
-2. Create and activate a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+Install the package from PyPI:
+```bash
+pip install persona-generator
+```
 
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+Or install from source:
+```bash
+git clone https://github.com/CiroGamboa/persona-generator.git
+cd persona-generator
+pip install -e .
+```
 
-4. Set up your environment:
+### Basic Usage
+
+1. Set up your environment:
    ```bash
-   # Create a .env file in the project root
+   # Create a .env file in your project directory
    echo "OPENAI_API_KEY=your_api_key_here" > .env
    ```
 
-5. Generate your first persona:
+2. Generate your first persona:
    ```bash
-   python main.py
+   persona-generator
+   ```
+
+   Or use it as a Python library:
+   ```python
+   from persona_generator import PersonaFactory
+   
+   factory = PersonaFactory()
+   personas = factory.generate_personas(1)
+   print(personas)
    ```
 
 ## Key Features
